@@ -249,6 +249,12 @@ def find_deadlocks(
             )
             data.append({})  # empty line to separate records
 
+    # Strip the queries of any trailing whitespace
+    for record in data:
+        if "query" not in record:
+            continue
+        record["query"] = record["query"].rstrip()
+
     return data
 
 
