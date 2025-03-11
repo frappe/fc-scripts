@@ -6,8 +6,11 @@ Helper scripts to be run on Frappe Cloud sites
 
 - Script to delete all files from the database and file system. [attachment_delete.py](./attachment_delete.py)
 - Read the deadlocks from mariadb error log [analyze_deadlocks.py](./analyze_deadlocks.py)
+- Check corruption in MariaDB tables and fix them [check_db_tables.sh](./check_db_tables.sh)
 
 ---
+
+## Usage -
 
 ### Deadlock Analyzer
 
@@ -36,4 +39,12 @@ options:
   --output-file OUTPUT_FILE
                         Path of file to store result
   --format FORMAT       csv / json / table (default: table)
+```
+
+### MariaDB Table Checker
+
+Need to run as root user
+
+```
+./check_db_tables.sh <database_name>
 ```
