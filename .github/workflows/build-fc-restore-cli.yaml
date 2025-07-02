@@ -121,6 +121,6 @@ jobs:
         run: |
           gh pr create \
             --title "feat(restore-cli): Update CLI binaries" \
-            --body "This PR updates the \`fcrestore/dist\` directory with fresh binaries for all platforms." \
+            --body "This PR updates the \`fcrestore/dist\` directory with fresh binaries for all platforms.\n\nAdditionally, please submit latest binary to Microsoft for whitelisting\nhttps://www.microsoft.com/en-us/wdsi/filesubmission" \
             --head "${{ env.branch }}" \
             --base develop
