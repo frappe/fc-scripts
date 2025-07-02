@@ -55,9 +55,9 @@ catch {
     Write-Host "URL attempted: $DownloadUrl" -ForegroundColor Red
     Write-Host ""
     Write-Host "This could mean:" -ForegroundColor Yellow
-    Write-Host "  • The binary for your platform (Windows/${Arch}) is not available" -ForegroundColor Yellow
-    Write-Host "  • There's a network connectivity issue" -ForegroundColor Yellow
-    Write-Host "  • Windows Defender or antivirus blocked the download" -ForegroundColor Yellow
+    Write-Host "  The binary for your platform (Windows/${Arch}) is not available" -ForegroundColor Yellow
+    Write-Host "  There's a network connectivity issue" -ForegroundColor Yellow
+    Write-Host "  Windows Defender or antivirus blocked the download" -ForegroundColor Yellow
     Write-Host ""
     Write-Host "Please report this issue at https://support.frappe.io" -ForegroundColor Yellow
     Write-Host "Include the following information:" -ForegroundColor Yellow
