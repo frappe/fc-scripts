@@ -48,3 +48,12 @@ Need to run as root user
 ```
 ./check_db_tables.sh <database_name>
 ```
+
+
+### MariaDB IO Monitor Installation
+
+Run this as root user
+
+```
+https://raw.githubusercontent.com/frappe/fc-scripts/refs/heads/develop/mariadb_io_monitor/install.sh
+```
