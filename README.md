@@ -54,6 +54,6 @@ Need to run as root user
 
 Run this as root user
 
-```
-https://raw.githubusercontent.com/frappe/fc-scripts/refs/heads/develop/mariadb_io_monitor/install.sh
+```bash
+curl -fsSL https://raw.githubusercontent.com/frappe/fc-scripts/refs/heads/develop/mariadb_io_monitor/install.sh | bash -
 ```
