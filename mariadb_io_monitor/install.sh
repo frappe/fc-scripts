@@ -27,6 +27,8 @@ Description=MariaDB IO Monitor
 After=network.target
 
 [Service]
+User=root
+Environment="HOME=/root"
 ExecStart=$BIN
 Restart=always
 RestartSec=5
