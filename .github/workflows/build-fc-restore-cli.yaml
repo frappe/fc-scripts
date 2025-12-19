@@ -28,15 +28,18 @@ jobs:
         run: |
           mkdir -p fcrestore-dist
           cd fcrestore-src
+
           platforms=(
             "linux amd64"
             "linux arm64"
             "darwin amd64"
             "darwin arm64"
           )
+
           for platform in "${platforms[@]}"; do
             read -r GOOS GOARCH <<< "$platform"
             OUTPUT="../fcrestore-dist/fcrestore-${GOOS}-${GOARCH}"
+            echo "Building for $GOOS/$GOARCH"
             GOOS=$GOOS GOARCH=$GOARCH go build -o "$OUTPUT" .
           done
 
@@ -57,9 +60,14 @@ jobs:
         run: |
           git clone --filter=blob:none --no-checkout https://github.com/frappe/press.git
           cd press
+
+          # REQUIRED: allow invalid Windows paths like `How to ?`
+          git config core.protectNTFS false
+
           git sparse-checkout init --cone
           git sparse-checkout set libs/fcrestore
           git checkout
+
           Copy-Item -Recurse -Path libs\fcrestore -Destination ..\fcrestore-src
 
       - name: Set up Go
@@ -72,10 +80,12 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path fcrestore-dist
           cd fcrestore-src
+
           $platforms = @(
             "windows amd64",
             "windows arm64"
           )
+
           foreach ($platform in $platforms) {
             $parts = $platform.Split(" ")
             $GOOS = $parts[0]
@@ -117,10 +127,12 @@ jobs:
           BRANCH="update-fcrestore-$(date +%s)"
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
+
           git checkout -b $BRANCH
           git add fcrestore/dist
           git commit -m "feat(restore-cli): Update CLI binaries"
           git push origin $BRANCH
+
           echo "branch=$BRANCH" >> $GITHUB_ENV
 
       - name: Create PR
