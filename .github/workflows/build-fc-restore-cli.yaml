@@ -6,16 +6,18 @@ on:
 jobs:
   build-nonwindows:
     runs-on: ubuntu-latest
-    outputs:
-      artifact-name: ${{ steps.upload.outputs.artifact }}
     steps:
       - name: Checkout fc-scripts
         uses: actions/checkout@v4
 
-      - name: Clone press repo (contains fcrestore)
+      - name: Clone press repo (sparse checkout fcrestore)
         run: |
-          git clone https://github.com/frappe/press.git
-          cp -r press/libs/fcrestore ./fcrestore-src
+          git clone --filter=blob:none --no-checkout https://github.com/frappe/press.git
+          cd press
+          git sparse-checkout init --cone
+          git sparse-checkout set libs/fcrestore
+          git checkout
+          cp -r libs/fcrestore ../fcrestore-src
 
       - name: Set up Go
         uses: actions/setup-go@v5
@@ -38,8 +40,7 @@ jobs:
             GOOS=$GOOS GOARCH=$GOARCH go build -o "$OUTPUT" .
           done
 
-      - name: Upload artifacts
-        id: upload
+      - name: Upload non-Windows artifacts
         uses: actions/upload-artifact@v4
         with:
           name: nonwindows-binaries
@@ -51,10 +52,15 @@ jobs:
       - name: Checkout fc-scripts
         uses: actions/checkout@v4
 
-      - name: Clone press repo (contains fcrestore)
+      - name: Clone press repo (sparse checkout fcrestore)
+        shell: pwsh
         run: |
-          git clone https://github.com/frappe/press.git
-          Copy-Item -Recurse -Path press\libs\fcrestore -Destination fcrestore-src
+          git clone --filter=blob:none --no-checkout https://github.com/frappe/press.git
+          cd press
+          git sparse-checkout init --cone
+          git sparse-checkout set libs/fcrestore
+          git checkout
+          Copy-Item -Recurse -Path libs\fcrestore -Destination ..\fcrestore-src
 
       - name: Set up Go
         uses: actions/setup-go@v5
@@ -62,6 +68,7 @@ jobs:
           go-version: '1.24'
 
       - name: Build Windows binaries
+        shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path fcrestore-dist
           cd fcrestore-src
