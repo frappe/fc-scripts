@@ -6,7 +6,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: ubuntu:20.04
     steps:
+      - name: Install dependencies
+        run: |
+          apt-get update
+          apt-get install -y curl git ca-certificates
+
       - name: Checkout fc-scripts
         uses: actions/checkout@v4
 
@@ -25,6 +32,7 @@ jobs:
           go-version: "1.24"
 
       - name: Build Linux binaries
+        shell: bash
         run: |
           mkdir -p mariadb-monitor-dist
           cd mariadb-monitor-src
@@ -38,7 +46,7 @@ jobs:
             read -r GOOS GOARCH <<< "$platform"
             OUTPUT="../mariadb-monitor-dist/mariadb_monitor-${GOOS}-${GOARCH}"
             echo "Building for $GOOS/$GOARCH"
-            GOOS=$GOOS GOARCH=$GOARCH go build -o "$OUTPUT" .
+            CGO_ENABLED=0 GOOS=$GOOS GOARCH=$GOARCH go build -buildvcs=false -o "$OUTPUT" .
           done
 
       - name: Upload artifacts
