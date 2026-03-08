@@ -57,3 +57,11 @@ Run this as root user
 ```bash
 curl -fsSL https://raw.githubusercontent.com/frappe/fc-scripts/refs/heads/develop/mariadb_io_monitor/install.sh | bash -
 ```
+
+### MariaDB Monitor Installation
+
+Run this as root user
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/frappe/fc-scripts/refs/heads/develop/mariadb_monitor/install.sh | bash -
+```
