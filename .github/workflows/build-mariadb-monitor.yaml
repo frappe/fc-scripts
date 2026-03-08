@@ -1,0 +1,86 @@
+name: Build MariaDB Monitor
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout fc-scripts
+        uses: actions/checkout@v4
+
+      - name: Clone press repo (sparse checkout mariadb_monitor)
+        run: |
+          git clone --filter=blob:none --no-checkout --branch master https://github.com/frappe/press.git
+          cd press
+          git sparse-checkout init --cone
+          git sparse-checkout set libs/mariadb_monitor
+          git checkout
+          cp -r libs/mariadb_monitor ../mariadb-monitor-src
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.24"
+
+      - name: Build Linux binaries
+        run: |
+          mkdir -p mariadb-monitor-dist
+          cd mariadb-monitor-src
+
+          platforms=(
+            "linux amd64"
+            "linux arm64"
+          )
+
+          for platform in "${platforms[@]}"; do
+            read -r GOOS GOARCH <<< "$platform"
+            OUTPUT="../mariadb-monitor-dist/mariadb_monitor-${GOOS}-${GOARCH}"
+            echo "Building for $GOOS/$GOARCH"
+            GOOS=$GOOS GOARCH=$GOARCH go build -o "$OUTPUT" .
+          done
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mariadb-monitor-binaries
+          path: mariadb-monitor-dist/*
+
+  commit-and-pr:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - name: Checkout fc-scripts
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download binaries
+        uses: actions/download-artifact@v4
+        with:
+          name: mariadb-monitor-binaries
+          path: mariadb_monitor/dist
+
+      - name: Commit and push binaries
+        run: |
+          BRANCH="update-mariadb-monitor-$(date +%s)"
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git checkout -b $BRANCH
+          git add mariadb_monitor/dist
+          git commit -m "feat(mariadb-monitor): Update binaries"
+          git push origin $BRANCH
+
+          echo "branch=$BRANCH" >> $GITHUB_ENV
+
+      - name: Create PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create \
+            --title "feat(mariadb-monitor): Update binaries" \
+            --body "This PR updates the \`mariadb_monitor/dist\` directory with fresh binaries for all Linux platforms." \
+            --head "${{ env.branch }}" \
+            --base develop
