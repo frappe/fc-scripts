@@ -16,8 +16,7 @@ else
     exit 1
 fi
 
-# Stop service (ignore failures)
-systemctl stop mariadb_monitor.service 2>/dev/null || true
+systemctl stop mariadb-monitor.service 2>/dev/null || true
 
 curl -fsSL -o "$BIN" "$URL"
 chmod +x "$BIN"
