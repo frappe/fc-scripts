@@ -7,6 +7,7 @@ Helper scripts to be run on Frappe Cloud sites
 - Script to delete all files from the database and file system. [attachment_delete.py](./attachment_delete.py)
 - Read the deadlocks from mariadb error log [analyze_deadlocks.py](./analyze_deadlocks.py)
 - Check corruption in MariaDB tables and fix them [check_db_tables.sh](./check_db_tables.sh)
+- On premises failover manager setup script [press-on-prem-failover.sh](./press-on-prem-failover.sh)
 
 ---
 
@@ -64,4 +65,20 @@ Run this as root user
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/frappe/fc-scripts/refs/heads/develop/mariadb_monitor/install.sh | bash -
+```
+
+
+### FC On Prem Failover Setup
+Run this as root user
+
+For first time setup
+```bash
+curl -fsSL https://raw.githubusercontent.com/frappe/fc-scripts/refs/heads/develop/press-on-prem-failover.sh -o press-on-prem-failover.sh && chmod +x ./press-on-prem-failover.sh && ./press-on-prem-failover.sh
+
+```
+
+For triggering another setup (for password updates etc.)
+```bash
+curl -fsSL https://raw.githubusercontent.com/frappe/fc-scripts/refs/heads/develop/press-on-prem-failover.sh -o press-on-prem-failover.sh && chmod +x ./press-on-prem-failover.sh && ./press-on-prem-failover.sh setup
+
 ```
