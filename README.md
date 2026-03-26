@@ -122,3 +122,13 @@ unzip awscliv2.zip && \
 ```bash
 curl https://raw.githubusercontent.com/frappe/fc-scripts/refs/heads/develop/data_recovery/recover.py -o recover.py
 ```
+
+**For database,**
+
+```bash
+export AWS_ACCESS_KEY_ID=xxxxxxxxxxxxxxxx
+export AWS_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxx
+export AWS_DEFAULT_REGION=ap-south-1
+
+python3 recover.py --mode db --data /opt/volumes/benches/xxxxx --bucket bahrain-data-recovery --prefix xxx-bahrain.frappe.cloud --db-pass xxxxxxxxxxxxxxxx
+```

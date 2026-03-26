@@ -20,7 +20,6 @@ def load_mapping():
 
 
 def save_mapping(mapping):
-    os.makedirs(os.path.dirname(MAPPING_FILE), exist_ok=True)
     with open(MAPPING_FILE, "w") as f:
         json.dump(mapping, f, indent=2)
 
@@ -32,9 +31,9 @@ def run(cmd):
 
 def start_mariadb(datadir):
     proc = subprocess.Popen(
-        ["mysqld_safe", f"--datadir={datadir}", "--skip-networking",
-         f"--socket={SOCKET}", "--pid-file=/tmp/recovery_mysql.pid"],
-        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        ["mysqld", f"--datadir={datadir}", "--skip-networking",
+         f"--socket={SOCKET}", "--user=root"],
+        stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
     )
     for _ in range(30):
         if os.path.exists(SOCKET):
