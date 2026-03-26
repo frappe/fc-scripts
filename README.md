@@ -82,3 +82,43 @@ For triggering another setup (for password updates etc.)
 curl -fsSL https://raw.githubusercontent.com/frappe/fc-scripts/refs/heads/develop/press-on-prem-failover.sh -o press-on-prem-failover.sh && chmod +x ./press-on-prem-failover.sh && ./press-on-prem-failover.sh setup
 
 ```
+
+### Data Recovery
+Setup Necessary Tools
+
+```bash
+# Install tools
+apt install unzip
+
+# Install mariadb
+apt-key add <(curl -fsSL https://mariadb.org/mariadb_release_signing_key.pgp)
+DISTRO=$(lsb_release -cs)
+echo "deb https://mirror.rackspace.com/mariadb/repo/10.6/ubuntu ${DISTRO} main" | \
+  tee /etc/apt/sources.list.d/mariadb.list
+
+apt update
+apt install -y mariadb-server mariadb-client libmariadbclient18
+systemctl disable mariadb
+systemctl stop mariadb || true
+
+ARCH=$(uname -m)
+
+if [[ "$ARCH" == "x86_64" ]]; then
+    URL="https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+elif [[ "$ARCH" == "aarch64" || "$ARCH" == "arm64" ]]; then
+    URL="https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip"
+else
+    echo "Unsupported architecture: $ARCH"
+    exit 1
+fi
+
+curl "${URL}" -o "awscliv2.zip" && \
+unzip awscliv2.zip && \
+./aws/install
+```
+
+
+#### Recover
+```bash
+curl https://raw.githubusercontent.com/frappe/fc-scripts/refs/heads/develop/data_recovery/recover.py -o recover.py
+```
