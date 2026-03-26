@@ -30,6 +30,7 @@ def run(cmd):
 
 
 def start_mariadb(datadir):
+    os.makedirs("/run/mysqld", exist_ok=True)
     proc = subprocess.Popen(
         ["mysqld", f"--datadir={datadir}", "--skip-networking",
          f"--socket={SOCKET}", "--user=root"],
