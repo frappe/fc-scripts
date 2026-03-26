@@ -63,6 +63,11 @@ def stop_mariadb(proc, db_pass):
 
 
 def recover_db(datadir, db_pass, bucket, prefix):
+    if os.path.exists("/etc/mysql") or os.path.exists("/root/.my.cnf"):
+        print("Error: Conflicting MySQL configuration found.")
+        print("Please move or rename '/etc/mysql' and '/root/.my.cnf' before running recovery.")
+        sys.exit(1)
+
     mapping = load_mapping()
     proc = start_mariadb(datadir)
 
