@@ -35,15 +35,21 @@ def start_mariadb(datadir):
          f"--socket={SOCKET}", "--user=root"],
         stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
     )
-    for _ in range(30):
+    attempts = 0
+    while True:
         if os.path.exists(SOCKET):
             if subprocess.run(["mysqladmin", f"--socket={SOCKET}", "ping"], capture_output=True).returncode == 0:
                 return proc
         time.sleep(1)
-
-    print("MariaDB failed to start.")
-    proc.terminate()
-    sys.exit(1)
+        attempts += 1
+        
+        if attempts >= 60:
+            user_input = input("\nMariaDB has not started after 60 seconds. Retry for another 60? (y/n): ")
+            if user_input.lower() != 'y':
+                print("MariaDB failed to start. Exiting.")
+                proc.terminate()
+                sys.exit(1)
+            attempts = 0
 
 
 def stop_mariadb(proc, db_pass):
