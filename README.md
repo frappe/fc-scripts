@@ -8,6 +8,7 @@ Helper scripts to be run on Frappe Cloud sites
 - Read the deadlocks from mariadb error log [analyze_deadlocks.py](./analyze_deadlocks.py)
 - Check corruption in MariaDB tables and fix them [check_db_tables.sh](./check_db_tables.sh)
 - On premises failover manager setup script [press-on-prem-failover.sh](./press-on-prem-failover.sh)
+- Find app-side document save hooks that make saving slow [find-doc-save-hooks.sh](./find-doc-save-hooks.sh)
 
 ---
 
@@ -50,6 +51,14 @@ Need to run as root user
 ./check_db_tables.sh <database_name>
 ```
 
+
+### Doc Save Hooks Finder
+
+Run from the bench root (it greps `./apps`). Prompts for a site name.
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/frappe/fc-scripts/refs/heads/develop/find-doc-save-hooks.sh | bash
+```
 
 ### MariaDB IO Monitor Installation
 
