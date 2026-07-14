@@ -3,7 +3,7 @@
 # Run from bench root:  bash find-doc-save-hooks.sh
 set -uo pipefail
 
-read -rp "Site name: " SITE
+read -rp "Site name: " SITE </dev/tty
 
 SKIP='{frappe,print_designer,india_compliance,drive,hrms,erpnext,lms,helpdesk,builder,insights,wiki,payments}'
 

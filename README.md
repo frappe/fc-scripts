@@ -57,7 +57,7 @@ Need to run as root user
 Run from the bench root (it greps `./apps`). Prompts for a site name.
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/frappe/fc-scripts/refs/heads/develop/find-doc-save-hooks.sh -o find-doc-save-hooks.sh && bash find-doc-save-hooks.sh
+curl -fsSL https://raw.githubusercontent.com/frappe/fc-scripts/refs/heads/develop/find-doc-save-hooks.sh | bash
 ```
 
 ### MariaDB IO Monitor Installation
