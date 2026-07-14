@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Find slow document save hooks users blame on the platform.
-# Run from bench root:  bash apps/press/server-scripts/find-doc-save-hooks.sh
+# Run from bench root:  bash find-doc-save-hooks.sh
 set -uo pipefail
 
 read -rp "Site name: " SITE
