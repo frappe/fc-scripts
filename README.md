@@ -9,6 +9,7 @@ Helper scripts to be run on Frappe Cloud sites
 - Check corruption in MariaDB tables and fix them [check_db_tables.sh](./check_db_tables.sh)
 - On premises failover manager setup script [press-on-prem-failover.sh](./press-on-prem-failover.sh)
 - Find app-side document save hooks that make saving slow [find-doc-save-hooks.sh](./find-doc-save-hooks.sh)
+- Find JS/CSS/icon bundles custom apps inject into every page load [find-asset-include-hooks.sh](./find-asset-include-hooks.sh)
 
 ---
 
@@ -58,6 +59,14 @@ Run from the bench root (it greps `./apps`). Prompts for a site name.
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/frappe/fc-scripts/refs/heads/develop/find-doc-save-hooks.sh | bash
+```
+
+### Asset Include Hooks Finder
+
+Run from the bench root. Prompts for a site name.
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/frappe/fc-scripts/refs/heads/develop/find-asset-include-hooks.sh | bash
 ```
 
 ### MariaDB IO Monitor Installation
