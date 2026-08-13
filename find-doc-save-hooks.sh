@@ -20,20 +20,11 @@ eval grep -rn -A 10 --exclude-dir="$SKIP" \
   -E "'(before|after)_(request|job)'" ./apps --include='hooks.py'
 
 echo "== Enabled Server Scripts with loops on common ERPNext doctypes =="
-# The code goes to a temp file and the console gets a single exec() line: bench console
-# is IPython, which chops piped stdin into per-line cells and mangles long lines.
-SCRIPT=$(mktemp)
-trap 'rm -f "$SCRIPT"' EXIT
-
-cat >"$SCRIPT" <<'PY'
-import re
-rows = frappe.get_all("Server Script",
-    filters={"disabled": 0, "reference_doctype": ["in",
-        ["Sales Order","Item","Job Card","Sales Invoice","Purchase Order","Stock Entry","Delivery Note"]]},
-    fields=["name","reference_doctype","doctype_event","script"])
-for r in rows:
-    if re.search(r"\b(for|while)\b", r.script or ""):
-        print(r.name, "|", r.reference_doctype, "|", r.doctype_event)
-PY
-
-echo "exec(open('$SCRIPT').read())" | bench --site "$SITE" console
+# ponytail: SQL, not bench console -- Server Scripts live in the database, and the
+# mariadb client reads piped stdin properly where IPython chops it into per-line cells.
+bench --site "$SITE" mariadb <<'SQL'
+SELECT name, reference_doctype, doctype_event FROM `tabServer Script`
+WHERE disabled = 0
+  AND reference_doctype IN ('Sales Order','Item','Job Card','Sales Invoice','Purchase Order','Stock Entry','Delivery Note')
+  AND script RLIKE '\\b(for|while)\\b';
+SQL
