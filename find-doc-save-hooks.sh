@@ -15,6 +15,10 @@ eval grep -rn -A 10 --exclude-dir="$SKIP" \
 echo "== doc_events in hooks.py =="
 eval grep -rn -A 10 --exclude-dir="$SKIP" 'doc_events' ./apps --include='hooks.py'
 
+echo "== Request/job hooks in hooks.py =="
+eval grep -rn -A 10 --exclude-dir="$SKIP" \
+  -E "'(before|after)_(request|job)'" ./apps --include='hooks.py'
+
 echo "== Enabled Server Scripts with loops on common ERPNext doctypes =="
 bench --site "$SITE" console <<'PY'
 import re
