@@ -20,13 +20,11 @@ eval grep -rn -A 10 --exclude-dir="$SKIP" \
   -E "'(before|after)_(request|job)'" ./apps --include='hooks.py'
 
 echo "== Enabled Server Scripts with loops on common ERPNext doctypes =="
+# Every statement below stays on one physical line: bench console is IPython, and it
+# runs each piped line as its own cell, so multi-line calls and indented blocks break.
 bench --site "$SITE" console <<'PY'
 import re
-rows = frappe.get_all("Server Script",
-    filters={"disabled": 0, "reference_doctype": ["in",
-        ["Sales Order","Item","Job Card","Sales Invoice","Purchase Order","Stock Entry","Delivery Note"]]},
-    fields=["name","reference_doctype","doctype_event","script"])
-for r in rows:
-    if re.search(r"\b(for|while)\b", r.script or ""):
-        print(r.name, "|", r.reference_doctype, "|", r.doctype_event)
+DOCTYPES = ["Sales Order","Item","Job Card","Sales Invoice","Purchase Order","Stock Entry","Delivery Note"]
+rows = frappe.get_all("Server Script", filters={"disabled": 0, "reference_doctype": ["in", DOCTYPES]}, fields=["name","reference_doctype","doctype_event","script"])
+print("\n".join(f"{r.name} | {r.reference_doctype} | {r.doctype_event}" for r in rows if re.search(r"\b(for|while)\b", r.script or "")))
 PY
