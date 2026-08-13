@@ -9,15 +9,15 @@ SKIP='{frappe,print_designer,india_compliance,drive,hrms,erpnext,lms,helpdesk,bu
 
 echo "== Controller lifecycle methods =="
 eval grep -rn -A 10 --exclude-dir="$SKIP" \
-  -E "'def (validate|before_save|after_save|before_insert|after_insert|on_update|on_change|on_submit|before_submit|on_trash|before_validate)\('" \
+  -E "'^[^#]*def (validate|before_save|after_save|before_insert|after_insert|on_update|on_change|on_submit|before_submit|on_trash|before_validate)\('" \
   ./apps --include='*.py'
 
 echo "== doc_events in hooks.py =="
-eval grep -rn -A 10 --exclude-dir="$SKIP" 'doc_events' ./apps --include='hooks.py'
+eval grep -rn -A 10 --exclude-dir="$SKIP" "'^[^#]*doc_events'" ./apps --include='hooks.py'
 
 echo "== Request/job hooks in hooks.py =="
 eval grep -rn -A 10 --exclude-dir="$SKIP" \
-  -E "'(before|after)_(request|job)'" ./apps --include='hooks.py'
+  -E "'^[^#]*(before|after)_(request|job)'" ./apps --include='hooks.py'
 
 echo "== Enabled Server Scripts with loops on common ERPNext doctypes =="
 bench --site "$SITE" console <<'PY'
