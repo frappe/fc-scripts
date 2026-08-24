@@ -10,6 +10,7 @@ Helper scripts to be run on Frappe Cloud sites
 - On premises failover manager setup script [press-on-prem-failover.sh](./press-on-prem-failover.sh)
 - Find app-side document save hooks that make saving slow [find-doc-save-hooks.sh](./find-doc-save-hooks.sh)
 - Find JS/CSS/icon bundles custom apps inject into every page load [find-asset-include-hooks.sh](./find-asset-include-hooks.sh)
+- Find the code that reads from the replica on a site with `read_from_replica` on [find-replica-reads.sh](./find-replica-reads.sh)
 
 ---
 
@@ -67,6 +68,14 @@ Run from the bench root. Prompts for a site name.
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/frappe/fc-scripts/refs/heads/develop/find-asset-include-hooks.sh | bash
+```
+
+### Replica Reads Finder
+
+Run from the bench root. Reads the apps only, so it also works when the site is down.
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/frappe/fc-scripts/refs/heads/develop/find-replica-reads.sh | bash
 ```
 
 ### MariaDB IO Monitor Installation
