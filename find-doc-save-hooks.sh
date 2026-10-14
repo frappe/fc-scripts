@@ -9,7 +9,7 @@ SKIP='{frappe,print_designer,india_compliance,drive,hrms,erpnext,lms,helpdesk,bu
 
 # Patterns are anchored at line start so commented-out matches are skipped; this drops
 # commented context lines (`./apps/x/hooks.py-41-# ...`) as well.
-drop_comments() { grep -vE '^\./apps/\S*-[0-9]+-\s*#'; }
+drop_comments() { grep -vE '^\./apps/[^:]*-[0-9]+-\s*#'; }
 
 echo "== Controller lifecycle methods =="
 eval grep -rn -A 10 --exclude-dir="$SKIP" \

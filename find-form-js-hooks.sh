@@ -12,7 +12,7 @@ HANDLER="^\s*(async\s+)?[\"']?($EVENTS)[\"']?\s*(\([^)]*\)\s*(\{|$)|:\s*(async\s
 
 # Patterns are anchored at line start so commented-out matches are skipped; this drops
 # commented context lines (`./apps/x/hooks.py-41-# ...`, `./apps/x/a.js-12-// ...`) as well.
-drop_comments() { grep -vE '^\./apps/\S*-[0-9]+-\s*(#|//)'; }
+drop_comments() { grep -vE '^\./apps/[^:]*-[0-9]+-\s*(#|//)'; }
 
 echo "== Form event handlers in app JS =="
 eval grep -rn -A 10 --exclude-dir="$SKIP" --exclude='*.min.js' \
