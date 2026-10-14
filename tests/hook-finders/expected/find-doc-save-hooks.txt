@@ -1,0 +1,12 @@
+== Controller lifecycle methods ==
+./apps/custom/custom/so.py:2:	def validate(self):
+./apps/custom/custom/so.py-4-		self.check()
+./apps/custom/custom/so.py-5-
+== doc_events in hooks.py ==
+./apps/custom/custom/hooks.py:25:doc_events = {
+./apps/custom/custom/hooks.py-26-	"Sales Order": {"validate": "custom.so.validate"},
+./apps/custom/custom/hooks.py-27-}
+./apps/custom/custom/hooks.py-28-
+./apps/custom/custom/hooks.py-30-after_job = ["custom.utils.after_job"]
+== Request/job hooks in hooks.py ==
+./apps/custom/custom/hooks.py:30:after_job = ["custom.utils.after_job"]

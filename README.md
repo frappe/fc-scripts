@@ -78,6 +78,8 @@ Run from the bench root (it greps `./apps`).
 curl -fsSL https://raw.githubusercontent.com/frappe/fc-scripts/refs/heads/develop/find-form-js-hooks.sh | bash
 ```
 
+To test the doc save and form JS finders against a fake bench, run `bash tests/hook-finders/run.sh`.
+
 ### MariaDB IO Monitor Installation
 
 Run this as root user
