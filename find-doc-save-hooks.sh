@@ -3,7 +3,7 @@
 # Run from bench root:  bash find-doc-save-hooks.sh
 set -uo pipefail
 
-read -rp "Site name: " SITE </dev/tty
+# read -rp "Site name: " SITE </dev/tty
 
 SKIP='{frappe,print_designer,india_compliance,drive,hrms,erpnext,lms,helpdesk,builder,insights,wiki,payments}'
 
@@ -19,12 +19,12 @@ echo "== Request/job hooks in hooks.py =="
 eval grep -rn -A 10 --exclude-dir="$SKIP" \
   -E "'(before|after)_(request|job)'" ./apps --include='hooks.py'
 
-echo "== Enabled Server Scripts with loops on common ERPNext doctypes =="
-# Every statement below stays on one physical line: bench console is IPython, and it
-# runs each piped line as its own cell, so multi-line calls and indented blocks break.
-bench --site "$SITE" console <<'PY'
-import re
-DOCTYPES = ["Sales Order","Item","Job Card","Sales Invoice","Purchase Order","Stock Entry","Delivery Note"]
-rows = frappe.get_all("Server Script", filters={"disabled": 0, "reference_doctype": ["in", DOCTYPES]}, fields=["name","reference_doctype","doctype_event","script"])
-print("\n".join(f"{r.name} | {r.reference_doctype} | {r.doctype_event}" for r in rows if re.search(r"\b(for|while)\b", r.script or "")))
-PY
+# echo "== Enabled Server Scripts with loops on common ERPNext doctypes =="
+# # Every statement below stays on one physical line: bench console is IPython, and it
+# # runs each piped line as its own cell, so multi-line calls and indented blocks break.
+# bench --site "$SITE" console <<'PY'
+# import re
+# DOCTYPES = ["Sales Order","Item","Job Card","Sales Invoice","Purchase Order","Stock Entry","Delivery Note"]
+# rows = frappe.get_all("Server Script", filters={"disabled": 0, "reference_doctype": ["in", DOCTYPES]}, fields=["name","reference_doctype","doctype_event","script"])
+# print("\n".join(f"{r.name} | {r.reference_doctype} | {r.doctype_event}" for r in rows if re.search(r"\b(for|while)\b", r.script or "")))
+# PY
