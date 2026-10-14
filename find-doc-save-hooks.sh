@@ -7,17 +7,21 @@ set -uo pipefail
 
 SKIP='{frappe,print_designer,india_compliance,drive,hrms,erpnext,lms,helpdesk,builder,insights,wiki,payments}'
 
+# Patterns are anchored at line start so commented-out matches are skipped; this drops
+# commented context lines (`./apps/x/hooks.py-41-# ...`) as well.
+drop_comments() { grep -vE '^\./apps/[^:]*-[0-9]+-\s*#'; }
+
 echo "== Controller lifecycle methods =="
 eval grep -rn -A 10 --exclude-dir="$SKIP" \
-  -E "'def (validate|before_save|after_save|before_insert|after_insert|on_update|on_change|on_submit|before_submit|on_trash|before_validate)\('" \
-  ./apps --include='*.py'
+  -E "'^\s*def (validate|before_save|after_save|before_insert|after_insert|on_update|on_change|on_submit|before_submit|on_trash|before_validate)\('" \
+  ./apps --include='*.py' | drop_comments
 
 echo "== doc_events in hooks.py =="
-eval grep -rn -A 10 --exclude-dir="$SKIP" 'doc_events' ./apps --include='hooks.py'
+eval grep -rn -A 10 --exclude-dir="$SKIP" -E "'^\s*doc_events'" ./apps --include='hooks.py' | drop_comments
 
 echo "== Request/job hooks in hooks.py =="
 eval grep -rn -A 10 --exclude-dir="$SKIP" \
-  -E "'(before|after)_(request|job)'" ./apps --include='hooks.py'
+  -E "'^\s*(before|after)_(request|job)'" ./apps --include='hooks.py' | drop_comments
 
 # echo "== Enabled Server Scripts with loops on common ERPNext doctypes =="
 # # Every statement below stays on one physical line: bench console is IPython, and it

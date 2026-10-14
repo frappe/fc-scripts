@@ -1,0 +1,34 @@
+== Form event handlers in app JS ==
+./apps/custom/custom/public/js/sales order.js:2:	refresh(frm) {
+./apps/custom/custom/public/js/sales order.js-4-		frm.add_custom_button("x");
+./apps/custom/custom/public/js/sales order.js-5-	},
+./apps/custom/custom/public/js/sales order.js:8:	validate: function(frm) {},
+./apps/custom/custom/public/js/sales order.js-9-	customer: (frm) => {},
+./apps/custom/custom/public/js/sales order.js:10:	onload: (frm) => {},
+./apps/custom/custom/public/js/sales order.js:11:	"before_save": function(frm) {},
+./apps/custom/custom/public/js/sales order.js:12:	'after_save': function(frm) {},
+./apps/custom/custom/public/js/sales order.js:13:	setup() {},
+./apps/custom/custom/public/js/sales order.js:14:	on_submit(doc) {},
+./apps/custom/custom/public/js/sales order.js:15:	async before_submit(frm) {},
+./apps/custom/custom/public/js/sales order.js:16:	onload_post_render: frm => {},
+./apps/custom/custom/public/js/sales order.js:17:	after_cancel(frm)
+./apps/custom/custom/public/js/sales order.js-18-	{
+./apps/custom/custom/public/js/sales order.js-19-		frm.refresh();
+./apps/custom/custom/public/js/sales order.js-20-		validate(x);
+./apps/custom/custom/public/js/sales order.js-21-	},
+./apps/custom/custom/public/js/sales order.js-22-});
+== doctype_js / page_js in hooks.py ==
+./apps/custom/custom/hooks.py:8:doctype_js = {"Sales Invoice": "public/js/sales_invoice.js"}
+./apps/custom/custom/hooks.py:9:doctype_list_js = {"Sales Invoice": "public/js/sales_invoice_list.js"}
+./apps/custom/custom/hooks.py:10:doctype_tree_js = {"Account": "public/js/account_tree.js"}
+./apps/custom/custom/hooks.py:11:doctype_calendar_js = {"Event": "public/js/event_calendar.js"}
+./apps/custom/custom/hooks.py:12:page_js = {"setup-wizard": "public/js/my_wizard.js"}
+./apps/custom/custom/hooks.py-13-
+./apps/custom/custom/hooks.py-14-
+./apps/custom/custom/hooks.py-15-
+./apps/custom/custom/hooks.py-16-
+./apps/custom/custom/hooks.py-17-
+./apps/custom/custom/hooks.py-18-
+./apps/custom/custom/hooks.py-19-
+./apps/custom/custom/hooks.py-20-
+./apps/custom/custom/hooks.py-21-
