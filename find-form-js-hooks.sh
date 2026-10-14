@@ -8,15 +8,19 @@ set -uo pipefail
 SKIP='{frappe,print_designer,india_compliance,drive,hrms,erpnext,lms,helpdesk,builder,insights,wiki,payments,node_modules,dist}'
 EVENTS='setup|onload|onload_post_render|refresh|validate|before_save|after_save|before_submit|on_submit|before_cancel|after_cancel'
 # Matches `refresh(frm) {`, `async refresh() {`, `refresh: function`, `"refresh": (frm) =>`, `refresh: frm =>`.
-HANDLER="\b($EVENTS)[\"']?\s*(\([^)]*\)\s*(\{|$)|:\s*(async\s+)?(function|\(|\w+\s*=>))"
+HANDLER="^\s*(async\s+)?[\"']?($EVENTS)[\"']?\s*(\([^)]*\)\s*(\{|$)|:\s*(async\s+)?(function|\(|\w+\s*=>))"
+
+# Patterns are anchored at line start so commented-out matches are skipped; this drops
+# commented context lines (`./apps/x/hooks.py-41-# ...`, `./apps/x/a.js-12-// ...`) as well.
+drop_comments() { grep -vE '^\./apps/\S*-[0-9]+-\s*(#|//)'; }
 
 echo "== Form event handlers in app JS =="
 eval grep -rn -A 10 --exclude-dir="$SKIP" --exclude='*.min.js' \
-  -E '"$HANDLER"' ./apps --include='*.js'
+  -E '"$HANDLER"' ./apps --include='*.js' | drop_comments
 
 echo "== doctype_js / page_js in hooks.py =="
 eval grep -rn -A 10 --exclude-dir="$SKIP" \
-  -E "'(doctype(_list|_tree|_calendar)?|page|webform_include)_js'" ./apps --include='hooks.py'
+  -E "'^\s*(doctype(_list|_tree|_calendar)?|page|webform_include)_js'" ./apps --include='hooks.py' | drop_comments
 
 # echo "== Enabled Client Scripts with loops or server calls on common ERPNext doctypes =="
 # # Every statement below stays on one physical line: bench console is IPython, and it
