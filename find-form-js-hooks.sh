@@ -7,12 +7,12 @@ set -uo pipefail
 
 SKIP='{frappe,print_designer,india_compliance,drive,hrms,erpnext,lms,helpdesk,builder,insights,wiki,payments,node_modules,dist}'
 EVENTS='setup|onload|onload_post_render|refresh|validate|before_save|after_save|before_submit|on_submit|before_cancel|after_cancel'
+# Matches `refresh(frm) {`, `async refresh() {`, `refresh: function`, `"refresh": (frm) =>`, `refresh: frm =>`.
+HANDLER="\b($EVENTS)[\"']?\s*(\([^)]*\)\s*\{|:\s*(async\s+)?(function|\(|\w+\s*=>))"
 
 echo "== Form event handlers in app JS =="
-# Matches `refresh(frm)`, `refresh: function`, `refresh: (frm) =>`, `async refresh(frm)`.
 eval grep -rn -A 10 --exclude-dir="$SKIP" --exclude='*.min.js' \
-  -E "'\b($EVENTS)\s*(\(\s*frm|:\s*(async\s+)?(function|\())'" \
-  ./apps --include='*.js'
+  -E '"$HANDLER"' ./apps --include='*.js'
 
 echo "== doctype_js / page_js in hooks.py =="
 eval grep -rn -A 10 --exclude-dir="$SKIP" \
