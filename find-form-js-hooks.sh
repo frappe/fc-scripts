@@ -8,7 +8,7 @@ set -uo pipefail
 SKIP='{frappe,print_designer,india_compliance,drive,hrms,erpnext,lms,helpdesk,builder,insights,wiki,payments,node_modules,dist}'
 EVENTS='setup|onload|onload_post_render|refresh|validate|before_save|after_save|before_submit|on_submit|before_cancel|after_cancel'
 # Matches `refresh(frm) {`, `async refresh() {`, `refresh: function`, `"refresh": (frm) =>`, `refresh: frm =>`.
-HANDLER="\b($EVENTS)[\"']?\s*(\([^)]*\)\s*\{|:\s*(async\s+)?(function|\(|\w+\s*=>))"
+HANDLER="\b($EVENTS)[\"']?\s*(\([^)]*\)\s*(\{|$)|:\s*(async\s+)?(function|\(|\w+\s*=>))"
 
 echo "== Form event handlers in app JS =="
 eval grep -rn -A 10 --exclude-dir="$SKIP" --exclude='*.min.js' \
